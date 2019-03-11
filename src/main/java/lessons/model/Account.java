@@ -25,6 +25,10 @@ public class Account {
         return balance;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Account{" +

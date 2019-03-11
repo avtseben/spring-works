@@ -5,6 +5,9 @@ import lessons.model.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Простая синхронизация без учёта порядка ресурсов. Легко пораждает deadlock
+ */
 public class MoneyTransferSyncImpl implements MoneyTransfer {
     private final static Logger LOGGER = LoggerFactory.getLogger(MoneyTransferSyncImpl.class);
 

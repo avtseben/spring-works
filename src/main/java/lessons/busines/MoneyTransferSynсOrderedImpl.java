@@ -16,10 +16,10 @@ public class MoneyTransferSynсOrderedImpl implements MoneyTransfer {
         if (from.getBalance() < amount) {
             throw new InsufficientFundsException(from);
         }
-        OrderedAccount oa = orderedAccounts(from, to);
-        LOGGER.debug("Try sync on account a: {} hashcode: {}", oa.getAcc1());
+        OrderedAccounts oa = orderAccounts(from, to);
+        LOGGER.debug("Try sync on account: {}", oa.getAcc1());
         synchronized (oa.getAcc1()) {
-            LOGGER.debug("Try sync on account b: {} hashcode: {}", oa.getAcc2());
+            LOGGER.debug("Try sync on account: {}", oa.getAcc2());
             synchronized (oa.getAcc2()) {
                 LOGGER.debug("Before money transfer - from: {} to: {}", from, to);
                 from.withdraw(amount);
@@ -30,19 +30,19 @@ public class MoneyTransferSynсOrderedImpl implements MoneyTransfer {
         LOGGER.debug("Transfer complete - a: {}, b: {}", from, to);
     }
 
-    private OrderedAccount orderedAccounts(Account a, Account b) {
+    private OrderedAccounts orderAccounts(Account a, Account b) {
         if (a.getId().compareTo(b.getId()) < 0) {
-            return new OrderedAccount(a, b);
+            return new OrderedAccounts(a, b);
         } else {
-            return new OrderedAccount(b, a);
+            return new OrderedAccounts(b, a);
         }
     }
 
-    private class OrderedAccount {
+    private class OrderedAccounts {
         private final Account acc1;
         private final Account acc2;
 
-        OrderedAccount(Account acc1, Account acc2) {
+        OrderedAccounts(Account acc1, Account acc2) {
             this.acc1 = acc1;
             this.acc2 = acc2;
         }

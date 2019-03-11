@@ -1,13 +1,13 @@
 package lessons.starter;
 
 import lessons.busines.MoneyTransfer;
-import lessons.busines.MoneyTransferSynсOrderedImpl;
+import lessons.busines.MoneyTransferLockImpl;
 import lessons.model.Account;
 
 public class MoneyTransferDeadlockEmulate {
 
     public static void main(String[] args) {
-        MoneyTransfer moneyTransfer = new MoneyTransferSynсOrderedImpl();
+        MoneyTransfer moneyTransfer = new MoneyTransferLockImpl();
         Account a = new Account("a", 1000);
         Account b = new Account("b", 1000);
 

@@ -1,16 +1,18 @@
 package lessons.model;
 
-public class Account {
-    private String id;
-    private int balance;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-    public Account(int balance) {
-        this.balance = balance;
-    }
+public class Account {
+    private final String id;
+    private int balance;
+    private final Lock lock;
+
 
     public Account(String id, int balance) {
         this.id = id;
         this.balance = balance;
+        this.lock = new ReentrantLock();
     }
 
     public void withdraw(int amount) {
@@ -27,6 +29,10 @@ public class Account {
 
     public String getId() {
         return id;
+    }
+
+    public Lock getLock() {
+        return lock;
     }
 
     @Override

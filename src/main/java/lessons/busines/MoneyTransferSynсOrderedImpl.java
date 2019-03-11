@@ -1,33 +1,22 @@
 package lessons.busines;
 
-import lessons.exception.InsufficientFundsException;
 import lessons.model.Account;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 1-й способ борьбы с deadlock упорядочить ресурсы
  */
-public class MoneyTransferSynсOrderedImpl implements MoneyTransfer {
-    private final static Logger LOGGER = LoggerFactory.getLogger(MoneyTransferSynсOrderedImpl.class);
-
+public class MoneyTransferSynсOrderedImpl extends AbstractMoneyTransfer {
     @Override
-    public void transfer(Account from, Account to, int amount) {
-        if (from.getBalance() < amount) {
-            throw new InsufficientFundsException(from);
-        }
-        OrderedAccounts oa = orderAccounts(from, to);
+    public void doTransfer(Account from, Account to, int amount) {
+        final OrderedAccounts oa = orderAccounts(from, to);
         LOGGER.debug("Try sync on account: {}", oa.getAcc1());
         synchronized (oa.getAcc1()) {
             LOGGER.debug("Try sync on account: {}", oa.getAcc2());
             synchronized (oa.getAcc2()) {
-                LOGGER.debug("Before money transfer - from: {} to: {}", from, to);
                 from.withdraw(amount);
                 to.deposit(amount);
-                LOGGER.debug("After money transfer - from: {} to: {}", from, to);
             }
         }
-        LOGGER.debug("Transfer complete - a: {}, b: {}", from, to);
     }
 
     private OrderedAccounts orderAccounts(Account a, Account b) {
